@@ -1,0 +1,52 @@
+# .github/ISSUE_TEMPLATE/code-refactoring.yml
+
+name: "🔧 Code Refactoring"
+description: "Suggest an improvement to the internal code structure or quality."
+title: "[REFACTOR] <A short description of the area to improve>"
+labels: ["refactor", "technical-debt"]
+body:
+  - type: markdown
+    attributes:
+      value: "### Thanks for helping improve our codebase! Refactoring improves code quality without changing its external behavior."
+
+  - type: textarea
+    id: code-location
+    attributes:
+      label: "1. Which part of the code needs refactoring?"
+      description: "Please list the relevant files, modules, classes, or functions."
+      placeholder: |
+        - src/components/UserProfile.js
+        - The entire `calculateOrderTotal` function in `src/utils/cart.js`
+    validations:
+      required: true
+
+  - type: textarea
+    id: refactor-reason
+    attributes:
+      label: "2. Why does this code need to be refactored?"
+      description: "Describe the current problem. Is the code hard to read, inefficient, difficult to test, or overly complex (i.e., technical debt)?"
+      placeholder: "The UserProfile component has too much state logic, making it hard to follow and test. It mixes data fetching with UI rendering."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-improvement
+    attributes:
+      label: "3. What is the proposed improvement?"
+      description: "Describe the desired state of the code after the refactor. This should be a high-level plan."
+      placeholder: "Extract the state logic and data fetching into a custom React hook (e.g., `useUserProfile`). The component should then only be responsible for rendering."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: "4. Verification Plan"
+      description: "How will we confirm that the refactor was successful and didn't introduce any new bugs?"
+      options:
+        - label: "All existing unit/integration tests for this area must pass."
+          required: true
+        - label: "The related feature will be manually tested to confirm behavior is unchanged."
+          required: false
+        - label: "New tests will be added to cover the refactored code."
+          required: false

@@ -1,0 +1,38 @@
+name: Protect `main` Branch
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: ["main"]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  block-and-close-pr:
+    name: Block and Close PR to Main unless from Dev
+    runs-on: ubuntu-latest
+
+    if: github.head_ref != 'dev'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add Explanatory Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body "🚨 **Pull Request Automatically Closed** 🚨
+
+          > This Pull Request was targeting the \`main\` branch directly from a feature branch (\`${{ github.head_ref }}\`) and has been automatically closed.
+          >
+          > Please **open a new PR** targeting the \`dev\` branch instead. Only the \`dev\` branch can be merged into \`main\`.
+          >
+          > Thank you!"
+
+      - name: Close the Pull Request (Reject)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr close ${{ github.event.pull_request.number }}
