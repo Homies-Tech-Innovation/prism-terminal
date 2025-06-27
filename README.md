@@ -22,7 +22,7 @@
     ·
     <a href="https://github.com/aditsuru-git/prism-terminal/issues/new?template=feature_request.yml">Request a Feature</a>
     ·
-    <a href="https://github.com/aditsuru-git/prism-terminal/blob/main/.github/contributing.md">View Contribution Guide</a>
+    <a href="https://github.com/aditsuru-git/prism-terminal/blob/main/docs/contributing.md">View Contribution Guide</a>
   </p>
 </div>
 
