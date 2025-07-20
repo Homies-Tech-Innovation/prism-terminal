@@ -1,5 +1,5 @@
 def main():
-    print("Hello from prism-terminal!")
+    print("")
 
 
 if __name__ == "__main__":
