@@ -15,7 +15,7 @@
   <h3 align="center">Prism Terminal</h3>
 
   <p align="center">
-    An intelligent terminal with integrated AI chat, voice interaction, and command execution capabilities.
+    An intelligent terminal with integrated AI chat and command execution capabilities.
     <br />
     <br />
     <a href="https://github.com/aditsuru-git/prism-terminal/issues/new?template=bug_report.yml">Report a Bug</a>
