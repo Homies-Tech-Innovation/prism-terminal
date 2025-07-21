@@ -5,7 +5,7 @@
 ### Responsibilities
 
 - Accepts user input.
-- Displays the code execution stream.
+- Displays the command execution stream.
 - Displays Gemini's response stream.
 
 ### Notes
