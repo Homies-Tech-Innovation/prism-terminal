@@ -2,7 +2,8 @@ from typing import Iterator
 from src.models import ExitCode
 import subprocess
 
-class ExecutionEngine():
+
+class ExecutionEngine:
     def execute_command(self, command: str) -> Iterator[str | ExitCode]:
         process = subprocess.Popen(
             command,
@@ -12,8 +13,8 @@ class ExecutionEngine():
             shell=True,
             text=True,
         )
-        
-        try:    
+
+        try:
             if process.stdout is not None:
                 while True:
                     stream = process.stdout.readline()
@@ -21,7 +22,11 @@ class ExecutionEngine():
                         yield stream
                     elif process.poll() is not None:
                         break
-            exit_code = ExitCode(exit_code=0) if process.returncode == 0 else ExitCode(exit_code=1)
+            exit_code = (
+                ExitCode(exit_code=0)
+                if process.returncode == 0
+                else ExitCode(exit_code=1)
+            )
             yield exit_code
         except KeyboardInterrupt:
             yield "^C\nProcess interrupted by user (Ctrl+C)\n"
@@ -35,6 +40,6 @@ class ExecutionEngine():
                 remaining_stream = process.stdout.read()
                 if remaining_stream:
                     yield remaining_stream
-        
+
 
 execution_engine = ExecutionEngine()

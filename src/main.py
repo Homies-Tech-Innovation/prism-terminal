@@ -1,5 +1,6 @@
 from src import settings
 
+
 def main():
     print("Hello from prism-terminal!")
 
