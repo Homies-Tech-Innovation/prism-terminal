@@ -71,6 +71,7 @@
 ### Notes
 
 - Returns output as a stream.
+- On error, the output stream contains the error message just like normal output; only the `ExitCode` value changes.
 
 ### Function Signatures
 
@@ -81,7 +82,14 @@
   ```
 - ```python
     class ExitCode(BaseModel):
-      exit_code: Literal[0, 1]
+      exit_code: Literal[0, 1] # 0 for clean exit; 1 for error
+  ```
+
+### Usage Example
+
+- ```python
+  from src.components import execution_engine
+  execution_engine.execute_command("ls")
   ```
 
 ## Prompt Engine
@@ -100,18 +108,17 @@
 
 ### Responsibilities
 
-- Tracks input and output from direct user interactions with the Execution Engine.
-- Tracks input and output from user and Execution Engine interactions with the LLM model.
+- Stores input and output from direct user interactions with the Execution Engine.
+- Stores input and output from user and Execution Engine interactions with the LLM model.
 
 ### Notes
 
-- Must adhere to the data structure specified in Gemini's documentation.
 - Should implement a maximum threshold to discard very old session data.
 
 ### Function Signatures
 
 - ```python
-  def add_entry(role: Literal["user", "llm", "system"], content: str) -> None
+  def add_entry(role: SessionEntryRole, content: str) -> None
   # Automatically checks threshold and removes oldest entries if limit exceeded
   ```
 - ```python
@@ -119,12 +126,20 @@
   # Converts entire session history into formatted string for prompt engine
   ```
 
+### Usage Example
+
+- ```python
+  from src.components import session_memory
+  session_memory.add_entry(SessionEntryRole.USER, "Content") # Make entry as user
+  session_memory_string = session_memory.format_to_string()
+  ```
+
 ## History Filter
 
 ### Responsibilities
 
 - Determines whether direct interactions between the user and the Execution Engine should be stored in session memory.
-- Makes entery in session memory on accepting an interaction.
+- Returns the sanitized interaction if it should be stored; otherwise, returns `False`.
 
 ### Core Algorithms
 
@@ -150,7 +165,7 @@
       command: str,
       output: str,
       status: ExitCode,
-  ) -> None:
+  ) -> SessionEntry | False:
   ```
 
 ## Output Processor
