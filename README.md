@@ -147,7 +147,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [license-url]: https://github.com/aditsuru-git/prism-terminal/blob/main/LICENSE
 [discord-shield]: https://img.shields.io/discord/1313767817996402698?logo=discord&logoColor=white&label=discord&color=4d3dff
 [discord-url]: https://discord.com/invite/HP2YPGSrWU
-[release-shield]: https://img.shields.io/github/v/release/aditsuru-git/prism-terminal
+[release-shield]: https://img.shields.io/github/v/release/aditsuru-git/prism-terminal?include_prereleases
 [release-url]: https://github.com/aditsuru-git/prism-terminal/releases
 [Python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://www.python.org/
