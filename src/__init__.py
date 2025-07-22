@@ -1,1 +1,1 @@
-from src.config import MAX_TOKENS
+from src.config import settings

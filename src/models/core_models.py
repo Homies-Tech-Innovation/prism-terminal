@@ -7,4 +7,4 @@ class RouteDecision(BaseModel):
 
 
 class ExitCode(BaseModel):
-    exit_code: Literal[0, 1]
+    exit_code: Literal[0, 1] # 0 for clean exit; 1 for error
