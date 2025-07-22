@@ -9,10 +9,15 @@ class Config(BaseSettings):
         description="Token limit must be between 10K and 500K"
     )
     
-    CHARS_PER_TOKEN_RATIO: int = Field(default=4, ge=2, le=5, description="Characters per token for estimation must be between 2 and 5")
+    CHARS_PER_TOKEN_RATIO: int = Field(
+        default=4,
+        ge=2,
+        le=7,
+        description="Characters per token for estimation must be between 2 and 7"
+    )
     
     model_config = {
         "env_file": ".env",
     }
 
-settings = Config()
+settings = Config()  # Ignore the IntelliSense error (if any)

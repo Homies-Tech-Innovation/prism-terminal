@@ -1,7 +1,7 @@
 [project]
 name = "prism-terminal"
 version = "0.1.0"
-description = "Intelligent terminal with integrated AI chat and command execution capabilities."
+description = "An innovative terminal experience designed to boost developer productivity by integrating modern AI directly into the command-line workflow."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
