@@ -40,6 +40,7 @@ class ExecutionEngine:
                 remaining_stream = process.stdout.read()
                 if remaining_stream:
                     yield remaining_stream
+            yield ExitCode(exit_code=1)
 
 
 execution_engine = ExecutionEngine()
