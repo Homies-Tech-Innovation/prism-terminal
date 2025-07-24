@@ -1,6 +1,7 @@
 from src.models import ExitCode
 from src import settings
 
+
 class OutputProcessor:
     MAX_SIZE = settings.MAX_OUTPUT_SIZE
     KEEP_START = settings.OUTPUT_KEEP_START_SIZE
