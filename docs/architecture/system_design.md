@@ -98,6 +98,34 @@
 
 - Formats prompts with system instructions and session memory.
 
+### Notes
+
+- The final output must be a single, formatted string.
+
+- The function should dynamically gather current system information (OS, username, etc.) to populate the placeholders.
+
+- The structure should follow this precise format to ensure the LLM receives context in a consistent and predictable way:
+
+  - ```python
+    from src.models import SessionEntryRole
+    f"
+    {System Instructions}
+
+    --- System Context ---
+    Operating System: {}
+    OS Architecture: {}
+    OS version: {}
+    OS Username: {}
+    Shell: {}
+    Current Directory: {}
+    Current Date & Time: {}
+
+    --- Conversation History ---
+    {Session Memory String}
+    {SessionEntryRole.USER}: {new_prompt}
+    "
+    ```
+
 ### Function Signatures
 
 - ```python
