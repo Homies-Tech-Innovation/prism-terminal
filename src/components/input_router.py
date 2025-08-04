@@ -1,7 +1,8 @@
 from src.models import RouteDecision
 from src import settings
 
-class InputRouter():
+
+class InputRouter:
     COMMAND_PREFIX = settings.COMMAND_PREFIX
     PROMPT_PREFIX = settings.PROMPT_PREFIX
     KNOWN_COMMANDS = settings.KNOWN_COMMANDS
@@ -11,15 +12,15 @@ class InputRouter():
         command_confidence = 0.0
         prompt_confidence = 0.0
         processed_input = user_input.lower().strip()
-        
-        # Command Prefix Detection 
+
+        # Command Prefix Detection
         if user_input.startswith(self.COMMAND_PREFIX):
             return RouteDecision(prediction="command")
 
-        # Prompt Prefix Detection 
+        # Prompt Prefix Detection
         if user_input.startswith(self.PROMPT_PREFIX):
             return RouteDecision(prediction="prompt")
-        
+
         # Command Dictionary Matching
         first_word = processed_input.split(maxsplit=1)[0]
         if first_word in self.KNOWN_COMMANDS:
@@ -32,17 +33,18 @@ class InputRouter():
             prompt_confidence += 0.5
         else:
             command_confidence += 0.2
-        
+
         # Sentence Length Analysis
         input_len = len(processed_input)
-        if input_len<10:
+        if input_len < 10:
             command_confidence += 0.2
-        elif input_len>25:
+        elif input_len > 25:
             prompt_confidence += 0.3
-        
-        if prompt_confidence>=command_confidence:
-            return RouteDecision(prediction='prompt')
+
+        if prompt_confidence >= command_confidence:
+            return RouteDecision(prediction="prompt")
         else:
-            return RouteDecision(prediction='command')
-        
+            return RouteDecision(prediction="command")
+
+
 input_router = InputRouter()
