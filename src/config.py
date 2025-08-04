@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field, model_validator
-
+from typing import Tuple
 
 class Config(BaseSettings):
     HISTORY_TOKEN_LIMIT: int = Field(
@@ -37,6 +37,31 @@ class Config(BaseSettings):
         le=7,
         description="Characters per token for estimation must be between 2 and 7",
     )
+    
+    COMMAND_PREFIX: str = Field(
+        default='!', 
+        min_length=1,
+        max_length=1,
+        description="Command prefix must be a single character"
+    )
+
+    PROMPT_PREFIX: str = Field(
+        default='>', 
+        min_length=1,
+        max_length=1,
+        description="Prompt prefix must be a single character"
+    )
+    
+    # --- Input Router Tunable Parameters ---
+    # These constants define the behavior of the InputRouter component.
+    # Adjust these values to fine-tune command/prompt detection.
+    KNOWN_COMMANDS: Tuple[str, ...] = (
+        "ls", "cd", "pwd", "git", "python", "npm", "curl", "grep"
+    )
+    Q_WORDS: Tuple[str, ...] = (
+        "what", "how", "why", "explain", "can"
+    )
+    # --- End Input Router Tunable Parameters ---
 
     @model_validator(mode="after")
     def output_truncation_config(self):
