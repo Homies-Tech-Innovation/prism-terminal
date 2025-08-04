@@ -40,6 +40,13 @@ This project uses environment variables for configuration. Copy `.env.sample` to
   - Maximum: 5000
   - Adjust to keep important trailing info (logs, errors, etc.)
 
+- **`COMMAND_PREFIX`** - Single character prefix to definitively identify user input as a command (default: `!`)
+
+  - Length: Must be exactly 1 character.
+
+- **`PROMPT_PREFIX`** - Single character prefix to definitively identify user input as a prompt (default: `>`)
+  - Length: Must be exactly 1 character.
+
 ## Setup
 
 1. Copy the sample file:
