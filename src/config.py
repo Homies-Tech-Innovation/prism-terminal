@@ -68,7 +68,7 @@ class Config(BaseSettings):
     )
     Q_WORDS: Tuple[str, ...] = ("what", "how", "why", "explain", "can")
     # --- End Input Router Tunable Parameters ---
-    
+
     # --- History Filter Tunable Parameters ---
     # These constants define the behavior of the InputRouter component.
     # Adjust these values to fine-tune command/prompt detection.
