@@ -38,7 +38,7 @@ The behavior of the Input Router is influenced by several predefined lists and n
 - **Question Words:** `Q_WORDS`
 - **Length Thresholds:** Used in Sentence Length Analysis (e.g., `<10`, `>25`)
 
-**Location:** These parameters are defined as constants within `src/constants.py` (assuming you adopt the `constants.py` approach) or as class attributes in the `InputRouter` class itself if you choose to keep them there.
+**Location:** These parameters are defined as constants within `src/config.py`.
 
 ### Core Algorithms for Prediction
 
@@ -197,35 +197,40 @@ After applying all applicable confidence-based algorithms, the `prompt_confidenc
 
 ### Responsibilities
 
-- Determines whether direct interactions between the user and the Execution Engine should be stored in session memory.
-- Returns the sanitized interaction if it should be stored; otherwise, returns `False`.
+Determines whether direct interactions between the user and the Execution Engine should be stored in session memory.
+Returns `True` if the interaction should be stored; otherwise, returns `False`.
+
+### Tunable Parameters
+
+- **`BLACK_LISTED_CMDS`** - A `Tuple[str, ...]` of commands that are not stored in the session history. These are typically low-value commands like `ls` and `cd`.
+
+**Location:** These parameters are defined as constants within `src/config.py`.
 
 ### Core Algorithms
 
-1. **Command Blacklist Filter**
+1. **Error Preservation**
+
+- Checks the `ExitCode` of a command.
+- If the command resulted in an error (non-zero exit code), it bypasses all other filters and is marked for storage (returns `True`).
+
+2. **Command Blacklist Filter**
 
 - Immediately rejects common, low-value commands (`ls`, `pwd`, `clear`).
-- If a command is on the blacklist, it is never stored.
+- If a command's first word is on the blacklist, it is never stored (returns `False`).
 
-2. **Error Preservation**
+3. **Sensitive Data Filter**
 
-- Checks the `ExecutionStatus` of a command.
-- If the command resulted in an error (non-zero exit code), it bypasses all other filters and is marked for storage.
-
-1. **Sensitive Data Filter**
-
-- Applied only to interactions that are marked for storage.
-- Uses regex patterns to find and censor potential secrets, API keys, and passwords in the command output.
+- (skipped for MVP)
 
 ### Function Signatures
 
-- ```python
-    def filter_and_store_entry(
-      command: str,
-      output: str,
-      status: ExitCode,
-  ) -> SessionEntry | False:
-  ```
+```python
+def process_interaction(
+    self,
+    input: str,
+    status: ExitCode,
+) -> bool:
+```
 
 ## Output Processor
 
