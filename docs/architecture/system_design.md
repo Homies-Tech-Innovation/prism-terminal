@@ -26,40 +26,71 @@
 
 ## Input Router
 
-### Responsibilities
+**Responsibilities**
+Parses user input to determine whether it is a prompt (to be forwarded to the Prompt Engine) or a direct command (to be forwarded to the Execution Engine).
 
-- Parses user input to determine whether it is a prompt (to be forwarded to the Prompt Engine) or a direct command (to be forwarded to the Execution Engine).
+### Configuration & Tunable Parameters
+
+The behavior of the Input Router is influenced by several predefined lists and numerical thresholds. These values are centrally defined and can be adjusted to fine-tune prediction accuracy:
+
+- **Prefixes:** `COMMAND_PREFIX`, `PROMPT_PREFIX`
+- **Command Dictionary:** `KNOWN_COMMANDS`
+- **Question Words:** `Q_WORDS`
+- **Length Thresholds:** Used in Sentence Length Analysis (e.g., `<10`, `>25`)
+
+**Location:** These parameters are defined as constants within `src/config.py`.
 
 ### Core Algorithms for Prediction
 
-1. **Prefix Detection Algorithm**
+The Input Router evaluates the input through a series of algorithms. Specific prefixes lead to an immediate routing decision. If no such prefixes are present, a confidence-based scoring system is used.
 
-   - Checks for shell prefixes (`!`, `$`, `>`).
-   - Adds `+0.8` to `command_confidence` for exact matches, `+0.1` to `prompt_confidence` otherwise.
+1.  **Command Prefix Detection**
 
-2. **Command Dictionary Matching**
+    - **Logic:** Checks if the input starts with the predefined command prefix (`!`).
+    - **Outcome:** If matched, immediately routes the input as a **command** without further analysis. This is a definitive indicator.
 
-   - Splits input and checks the first word against known commands (`ls`, `cd`, `pwd`, `git`, `python`, `npm`, `curl`, `grep`).
-   - Adds `+0.7` to `command_confidence` for matches, `+0.2` to `prompt_confidence` for non-matches.
+2.  **Prompt Prefix Detection**
 
-3. **Question Pattern Detection**
+    - **Logic:** Checks if the input starts with the predefined prompt prefix (`>`).
+    - **Outcome:** If matched, immediately routes the input as a **prompt** without further analysis. This is a definitive indicator.
 
-   - Scans for question words (`what`, `how`, `why`, `help`), question marks, and conversational patterns.
-   - Adds `+0.6` to `prompt_confidence` for matches, `+0.1` to `command_confidence` otherwise.
+3.  **Command Dictionary Matching**
 
-4. **Sentence Structure Analysis**
-   - Checks for complete sentences with proper grammar, articles (`a`, `an`, `the`), and punctuation. Commands typically lack these patterns.
-   - Adds `+0.5` to `prompt_confidence` for sentence-like structure, `+0.3` to `command_confidence` for command-like syntax.
+    - **Applicability:** Applies only if no definitive prefix was found.
+    - **Logic:** Splits the input and checks the first word against a dictionary of known commands (`ls`, `cd`, `pwd`, `git`, `python`, `npm`, `curl`, `grep`).
+    - **Confidence Impact:**
+      - Adds `+0.7` to `command_confidence` for matches.
+      - Adds `+0.2` to `prompt_confidence` for non-matches (indicating the first word isn't a known command).
+
+4.  **Question Pattern Detection**
+
+    - **Applicability:** Applies only if no definitive prefix was found.
+    - **Logic:** Scans for common question words (`what`, `how`, `why`, `explain`, `can`).
+    - **Confidence Impact:**
+      - Adds `+0.5` to `prompt_confidence` for matches.
+      - Adds `+0.2` to `command_confidence` otherwise (indicating a lack of question patterns).
+
+5.  **Sentence Length Analysis**
+    - **Applicability:** Applies only if no definitive prefix was found.
+    - **Logic:** Analyzes the length of the processed input string.
+    - **Confidence Impact:**
+      - If the input length is less than `10` characters: Adds `+0.2` to `command_confidence` (shorter strings often indicate commands).
+      - If the input length is greater than `25` characters: Adds `+0.3` to `prompt_confidence` (longer strings often indicate natural language prompts).
+
+### Final Decision Logic (If no prefix match)
+
+After applying all applicable confidence-based algorithms, the `prompt_confidence` and `command_confidence` scores are compared:
+
+- If `prompt_confidence` is greater than or equal to `command_confidence`, the input is predicted as a `prompt`.
+- Otherwise, the input is predicted as a `command`.
 
 ### Function Signatures
 
 - ```python
-    def route_input(user_input: str) -> RouteDecision
-  ```
+  def route_input(user_input: str) -> RouteDecision
 
-- ```python
-    class RouteDecision(BaseModel):
-            prediction: Literal["command", "prompt"]
+  class RouteDecision(BaseModel):
+  prediction: Literal["command", "prompt"]
   ```
 
 ## Execution Engine
@@ -97,6 +128,34 @@
 ### Responsibilities
 
 - Formats prompts with system instructions and session memory.
+
+### Notes
+
+- The final output must be a single, formatted string.
+
+- The function should dynamically gather current system information (OS, username, etc.) to populate the placeholders.
+
+- The structure should follow this precise format to ensure the LLM receives context in a consistent and predictable way:
+
+  - ```python
+    from src.models import SessionEntryRole
+    f"
+    {System Instructions}
+
+    --- System Context ---
+    Operating System: {}
+    OS Architecture: {}
+    OS version: {}
+    OS Username: {}
+    Shell: {}
+    Current Directory: {}
+    Current Date & Time: {}
+
+    --- Conversation History ---
+    {Session Memory String}
+    {SessionEntryRole.USER}: {new_prompt}
+    "
+    ```
 
 ### Function Signatures
 
@@ -138,35 +197,40 @@
 
 ### Responsibilities
 
-- Determines whether direct interactions between the user and the Execution Engine should be stored in session memory.
-- Returns the sanitized interaction if it should be stored; otherwise, returns `False`.
+Determines whether direct interactions between the user and the Execution Engine should be stored in session memory.
+Returns `True` if the interaction should be stored; otherwise, returns `False`.
+
+### Tunable Parameters
+
+- **`BLACK_LISTED_CMDS`** - A `Tuple[str, ...]` of commands that are not stored in the session history. These are typically low-value commands like `ls` and `cd`.
+
+**Location:** These parameters are defined as constants within `src/config.py`.
 
 ### Core Algorithms
 
-1. **Command Blacklist Filter**
+1. **Error Preservation**
+
+- Checks the `ExitCode` of a command.
+- If the command resulted in an error (non-zero exit code), it bypasses all other filters and is marked for storage (returns `True`).
+
+2. **Command Blacklist Filter**
 
 - Immediately rejects common, low-value commands (`ls`, `pwd`, `clear`).
-- If a command is on the blacklist, it is never stored.
+- If a command's first word is on the blacklist, it is never stored (returns `False`).
 
-2. **Error Preservation**
+3. **Sensitive Data Filter**
 
-- Checks the `ExecutionStatus` of a command.
-- If the command resulted in an error (non-zero exit code), it bypasses all other filters and is marked for storage.
-
-1. **Sensitive Data Filter**
-
-- Applied only to interactions that are marked for storage.
-- Uses regex patterns to find and censor potential secrets, API keys, and passwords in the command output.
+- (skipped for MVP)
 
 ### Function Signatures
 
-- ```python
-    def filter_and_store_entry(
-      command: str,
-      output: str,
-      status: ExitCode,
-  ) -> SessionEntry | False:
-  ```
+```python
+def process_interaction(
+    self,
+    input: str,
+    status: ExitCode,
+) -> bool:
+```
 
 ## Output Processor
 
@@ -208,3 +272,7 @@
 | LLM API Call (Prompt Engine)            | Waiting for LLM response, Ctrl+C             | Cancel API request, return to prompt                         | Prompt Engine (request cancellation)        |
 | Processing Between Components           | Internal logic running, Ctrl+C               | Python raises `KeyboardInterrupt`, app exits (unless caught) | Python (should catch and handle gracefully) |
 | UI Rendering (UI Manager)               | Rendering output, Ctrl+C                     | Stop rendering, return to prompt                             | Textual framework + custom code             |
+
+```
+
+```
