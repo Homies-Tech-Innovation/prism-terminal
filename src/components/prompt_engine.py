@@ -1,8 +1,7 @@
 import platform
 import os
 from datetime import datetime
-from typing import Optional
-from src.models.session_memory_model import SessionEntryRole
+from src.models import SessionEntryRole
 
 
 class PromptEngine:
@@ -12,21 +11,11 @@ class PromptEngine:
         session_memory: str,
         new_prompt: str
     ) -> str:
-        """
-        Formats prompts with system instructions and session memory.
-       
-        Args:
-            system_instructions: The system instructions to include
-            session_memory: The formatted session memory string
-            new_prompt: The new user prompt
-           
-        Returns:
-            A single formatted string ready for LLM consumption
-        """
         # Get system context information
         system_context = self._get_system_context()
        
-        return f"""{system_instructions}
+        return f"""
+{system_instructions}
 
 --- System Context ---
 Operating System: {system_context['os']}
@@ -39,7 +28,8 @@ Current Date & Time: {system_context['datetime']}
 
 --- Conversation History ---
 {session_memory}
-{SessionEntryRole.USER}: {new_prompt}"""
+{SessionEntryRole.USER}: {new_prompt}
+        """
 
     def _get_system_context(self) -> dict[str, str]:
         """
