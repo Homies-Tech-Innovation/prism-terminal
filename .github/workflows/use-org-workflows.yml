@@ -1,0 +1,30 @@
+name: Use Organization Workflows
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  schedule:
+    - cron: "0 9 * * 1" # Weekly dependency updates
+
+jobs:
+  # Call org-level workflows
+  security:
+    uses: Homies-Tech-Innovation/.github/workflows/security.yml@main
+    secrets: inherit
+
+  ruff-format:
+    if: contains(github.event.head_commit.modified, '.py')
+    uses: Homies-Tech-Innovation/.github/workflows/ruff-format.yml@main
+    secrets: inherit
+
+  dependency-update:
+    if: github.event_name == 'schedule'
+    uses: Homies-Tech-Innovation/.github/workflows/dependency-update.yml@main
+    secrets: inherit
+
+  release-drafter:
+    if: github.event_name == 'push'
+    uses: Homies-Tech-Innovation/.github/workflows/release-drafter.yml@main
+    secrets: inherit
