@@ -17,6 +17,7 @@ jobs:
       contents: read # To check out the code
       security-events: write # To upload SARIF results
       actions: read # For TruffleHog to access repo contents
+      pull-requests: write
     secrets: inherit
 
   # Ruff runs only if Python files changed (logic is inside the reusable workflow)
