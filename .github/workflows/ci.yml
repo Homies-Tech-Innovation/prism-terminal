@@ -37,15 +37,6 @@ jobs:
       pull-requests: write # To create a pull request
     secrets: inherit
 
-  # Release Drafter runs on pushes to the main branch
-  release-drafter:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    uses: Homies-Tech-Innovation/.github/.github/workflows/release-drafter.yml@main
-    permissions:
-      contents: write # To update the release draft
-      pull-requests: write # To manage the release draft PR
-    secrets: inherit
-
   # This job will run on PRs to the main branch that are NOT from the dev branch.
   pr-guard:
     if: github.event_name == 'pull_request' && github.base_ref == 'main' && github.head_ref != 'dev'
