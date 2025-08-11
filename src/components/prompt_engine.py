@@ -33,7 +33,7 @@ Current Date & Time: {system_context["datetime"]}
         Gathers current system information for context.
 
         Returns:
-            Dictionary containing system context information
+            Dictionary containing system context information.
         """
         try:
             # Get OS information
