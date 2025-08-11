@@ -11,20 +11,20 @@ on:
 jobs:
   # Call org-level workflows
   security:
-    uses: ./.github/workflows/security.yml@main
+    uses: Homies-Tech-Innovation/.github/.github/workflows/security.yml@main
     secrets: inherit
 
   ruff-format:
     if: contains(github.event.head_commit.modified, '.py')
-    uses: ./.github/workflows/ruff-format.yml@main
+    uses: Homies-Tech-Innovation/.github/.github/workflows/ruff-format.yml@main
     secrets: inherit
 
   dependency-update:
     if: github.event_name == 'schedule'
-    uses: ./.github/workflows/dependency-update.yml@main
+    uses: Homies-Tech-Innovation/.github/.github/workflows/dependency-update.yml@main
     secrets: inherit
 
   release-drafter:
     if: github.event_name == 'push'
-    uses: ./.github/workflows/release-drafter.yml@main
+    uses: Homies-Tech-Innovation/.github/.github/workflows/release-drafter.yml@main
     secrets: inherit
