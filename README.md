@@ -6,7 +6,7 @@
 <a id="readme-top"></a>
 
 <div align="center">
-  <a href="https://github.com/aditsuru-git/prism-terminal">
+  <a href="https://github.com/aditsuru/prism-terminal">
     <img src="./assets/logo.png" alt="Logo" width="100" height="100">
   </a>
   <h3 align="center">Prism Terminal</h3>
@@ -14,11 +14,11 @@
     Your command-line copilot
     <br />
     <br />
-    <a href="https://github.com/aditsuru-git/prism-terminal/issues/new?template=bug_report.yml">Report a Bug</a>
+    <a href="https://github.com/aditsuru/prism-terminal/issues/new?template=bug_report.yml">Report a Bug</a>
     ·
-    <a href="https://github.com/aditsuru-git/prism-terminal/issues/new?template=feature_request.yml">Request a Feature</a>
+    <a href="https://github.com/aditsuru/prism-terminal/issues/new?template=feature_request.yml">Request a Feature</a>
     ·
-    <a href="https://github.com/aditsuru-git/prism-terminal/blob/main/.github/contributing.md">View Contribution Guide</a>
+    <a href="https://github.com/aditsuru/prism-terminal/blob/main/.github/contributing.md">View Contribution Guide</a>
   </p>
 </div>
 
@@ -73,7 +73,7 @@ Make sure you have Python 3.8+ and UV installed on your system.
 1. Clone the repository to your local machine:
 
 - ```sh
-  git clone https://github.com/aditsuru-git/prism-terminal.git
+  git clone https://github.com/aditsuru/prism-terminal.git
   cd prism-terminal
   ```
 
@@ -130,25 +130,25 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 <h1><h1/>
 <div align="center">
-  <img src="https://github.com/aditsuru-git/readme-template/blob/main/assets/footer-team.png?raw=true" alt="Footer Banner" width="100%" style="max-width: 1200px;">
+  <img src="https://github.com/aditsuru/readme-template/blob/main/assets/footer-team.png?raw=true" alt="Footer Banner" width="100%" style="max-width: 1200px;">
 </div>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/aditsuru-git/prism-terminal
-[contributors-url]: https://github.com/aditsuru-git/prism-terminal/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/aditsuru-git/prism-terminal
-[forks-url]: https://github.com/aditsuru-git/prism-terminal/network/members
-[stars-shield]: https://img.shields.io/github/stars/aditsuru-git/prism-terminal
-[stars-url]: https://github.com/aditsuru-git/prism-terminal/stargazers
-[issues-shield]: https://img.shields.io/github/issues/aditsuru-git/prism-terminal
-[issues-url]: https://github.com/aditsuru-git/prism-terminal/issues
-[license-shield]: https://img.shields.io/github/license/aditsuru-git/prism-terminal
-[license-url]: https://github.com/aditsuru-git/prism-terminal/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/aditsuru/prism-terminal
+[contributors-url]: https://github.com/aditsuru/prism-terminal/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/aditsuru/prism-terminal
+[forks-url]: https://github.com/aditsuru/prism-terminal/network/members
+[stars-shield]: https://img.shields.io/github/stars/aditsuru/prism-terminal
+[stars-url]: https://github.com/aditsuru/prism-terminal/stargazers
+[issues-shield]: https://img.shields.io/github/issues/aditsuru/prism-terminal
+[issues-url]: https://github.com/aditsuru/prism-terminal/issues
+[license-shield]: https://img.shields.io/github/license/aditsuru/prism-terminal
+[license-url]: https://github.com/aditsuru/prism-terminal/blob/main/LICENSE
 [discord-shield]: https://img.shields.io/discord/1313767817996402698?logo=discord&logoColor=white&label=discord&color=4d3dff
 [discord-url]: https://discord.com/invite/HP2YPGSrWU
-[release-shield]: https://img.shields.io/github/v/release/aditsuru-git/prism-terminal?include_prereleases
-[release-url]: https://github.com/aditsuru-git/prism-terminal/releases
+[release-shield]: https://img.shields.io/github/v/release/aditsuru/prism-terminal?include_prereleases
+[release-url]: https://github.com/aditsuru/prism-terminal/releases
 [Python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://www.python.org/
 [Gemini-badge]: https://img.shields.io/badge/GEMINI-white?style=for-the-badge&logo=googlegemini&logoColor=blue
